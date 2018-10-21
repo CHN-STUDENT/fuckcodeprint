@@ -1,3 +1,4 @@
 cpp:cpp
 java:java
 octave:m
+bash:sh

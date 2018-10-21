@@ -6,5 +6,5 @@ numbersep=5pt,
 breaksymbolleft={\ },
 breaklines, 
 tabsize=4, 
-frame=lines,
+%frame=lines,
 framesep=4mm

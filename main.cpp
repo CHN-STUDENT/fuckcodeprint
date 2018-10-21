@@ -199,11 +199,11 @@ void MakeTempDir()
     strcat(create_command,"\\src");
     system(create_command);
 
-    printf("\nCopy the latex template. >> "); //把模板文件复制进去
+    printf("\nCopy the latex file. >> "); //把模板文件复制进去
     char copy_command[600]="";
     strcat(copy_command,"xcopy /Q ");
     strcat(copy_command,path);
-    strcat(copy_command,"\\template.tex ");
+    strcat(copy_command,"\\latex\\* ");
     strcat(copy_command,temppath);
     //cout<<copy_command;
     system(copy_command);

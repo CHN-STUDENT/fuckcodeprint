@@ -1,0 +1,41 @@
+\documentclass[UTF8,18pt,a4paper]{ctexart}
+\usepackage[utf8]{inputenc}
+\parindent 2em   %段首缩进
+\usepackage{minted}
+\usepackage{geometry}
+\usepackage{graphicx}
+\pagestyle{plain}
+\geometry{a4paper,scale=0.8}
+
+\begin{document}
+
+\begin{figure}[H]
+\centering
+\includegraphics [scale=0.2] {img.png}
+\end{figure}
+
+
+\section{Pet.java}
+\inputminted[%This is minted option,please do not use Chinese!
+%showtabs,
+obeytabs,
+linenos,
+numbersep=5pt,
+breaksymbolleft={\ },
+breaklines, 
+tabsize=4, 
+%frame=lines,
+framesep=4mm]{java}{src/Pet.java}
+\section{Homework5.java}
+\inputminted[%This is minted option,please do not use Chinese!
+%showtabs,
+obeytabs,
+linenos,
+numbersep=5pt,
+breaksymbolleft={\ },
+breaklines, 
+tabsize=4, 
+%frame=lines,
+framesep=4mm]{java}{src/Homework5.java}
+
+\end{document}
