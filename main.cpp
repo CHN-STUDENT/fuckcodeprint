@@ -32,6 +32,9 @@ void DealWithFile();
 
 int main()
 {
+    cout<<"FuckCodePrint (Code to PDF By Latex)"<<endl;
+    cout<<"Author:CHN-Student<chn-student@outlook.com>"<<endl;
+    cout<<"Project:https://github.com/CHN-STUDENT/fuckcodeprint"<<endl;
     printf("Please wait.\n");
     cout<<"--------------------------------------------------------------------"<<endl;
     SetSupportList();//读取支持的代码设置文件
@@ -46,6 +49,7 @@ void DealWithFile()
     vector<SupportName>::const_iterator SupportListIterator = SupportList.begin();
     SupportName S;
     static bool once = true;
+    static bool normal = false;
     char srcpath[256]="";
     _getcwd(srcpath,256);//得到当前路径
     strcat(srcpath, "\\src");
@@ -53,6 +57,15 @@ void DealWithFile()
     _getcwd(tempsrcpath,256);//得到当前路径
     strcat(tempsrcpath, "\\temp\\src");
     char copy_command[600]="";
+    fstream templatefile;
+    fstream tempfile;
+    char temp[1024];
+    char templatefilepath[256]="";
+    _getcwd(templatefilepath,256);//得到当前路径
+    strcat(templatefilepath, "\\temp\\template.tex");
+    char tempfilepath[256]="";
+    _getcwd(tempfilepath,256);//得到当前路径
+    strcat(tempfilepath, "\\temp\\temp.tex");
     while(!FilesInfo.empty())
     {//对每一个文件处理
         Files F;
@@ -68,7 +81,36 @@ void DealWithFile()
                     MakeTempDir(); //创建临时工作文件夹
                     LoadMintedSet();//读取minted设置
                     once=false;
-                    //TODO:按行读取模板文件读取到标识符%This is the locator to add your file, don't edit it.那一行将读取文件重新定向写入到temp.tex
+                    templatefile.open(templatefilepath,ios::in);
+                    tempfile.open(tempfilepath,ios::out);
+                    //按行读取模板文件读取到标识符<%This is the locator to add your file, don't edit it.>那一行将读取文件重新定向写入到temp.tex
+                     while(!templatefile.eof())
+                    {
+                        templatefile.getline(temp,1024,'\n');
+                        //cout<<temp<<endl;
+                        if(strcmp(temp,"%This is the locator to add your file, don't edit it.")==0)
+                        {
+                            normal=true;
+                            break;
+                        }
+                        tempfile<<temp<<endl;
+                    }
+                    if(!normal)
+                    {
+                        cout<<"--------------------------------------------------------------------"<<endl;
+                        cout<<"Error:you must the locator in your template file.Exit!"<<endl;
+                        tempfile.close();
+                        templatefile.close();
+                        printf("Delete the temp dir.");
+                        char remove_command[300]="";
+                        char temppath[256]="";
+                        _getcwd(temppath,256);//得到当前路径
+                        strcat(temppath,"\\temp");
+                        strcat(remove_command,"rd /S/Q ");
+                        strcat(remove_command,temppath);
+                        system(remove_command);
+                        exit(0);
+                    }
                 }
                 cout<<"Find '"<<F.FullName<<"' is support and add it. >> ";
                 strcat(copy_command,"xcopy /Q ");
@@ -80,7 +122,9 @@ void DealWithFile()
                 //cout<<copy_command<<endl;
                 system(copy_command);
                 memset(copy_command,0,sizeof(copy_command));
-                //TODO:将\section{文件名}写入标识符下一行以及\inputminted[语法高亮选项]{支持列表软件名}{src\文件名}写入
+                tempfile<<"\\section{"<<F.FullName<<"}"<<endl;
+                tempfile<<"\\inputminted["<<mintedSet<<"]{"<<S.SoftwareName<<"}{src/"<<F.FullName<<"}"<<endl;
+
             }
             SupportListIterator++;//迭代器指针+1
         }
@@ -89,7 +133,12 @@ void DealWithFile()
     }
     if(!once)
     {
-        //写入剩下的部分
+         while(!templatefile.eof())
+        {
+            templatefile.getline(temp,1024,'\n');
+            //cout<<temp<<endl;
+            tempfile<<temp<<endl;
+        }
         cout<<"--------------------------------------------------------------------"<<endl;
         cout<<"Start to use XeLatex to bulid."<<endl;
         cout<<"--------------------------------------------------------------------"<<endl;
@@ -114,6 +163,8 @@ void DealWithFile()
         cout<<copy_command<<endl;
         system(copy_command);
         cout<<"--------------------------------------------------------------------"<<endl;
+        tempfile.close();
+        templatefile.close();
         printf("Delete the temp dir.");
         char remove_command[300]="";
         strcat(remove_command,"rd /S/Q ");
@@ -157,6 +208,7 @@ void LoadMintedSet()
     ostringstream tmp;
     tmp << in.rdbuf();
     mintedSet = tmp.str();
+    in.close();
 }
 
 void SetSupportList()

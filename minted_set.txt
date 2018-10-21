@@ -1,10 +1,10 @@
-%这是minted高亮语法选项，请参照官方说明设置
+%This is minted option,please do not use Chinese!
 %showtabs,
 obeytabs,
 linenos,
 numbersep=5pt,
 breaksymbolleft={\ },
-breaklines, %自动折行  
-tabsize=4, %设置tab空格数 
+breaklines, 
+tabsize=4, 
 frame=lines,
 framesep=4mm
