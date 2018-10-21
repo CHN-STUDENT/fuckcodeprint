@@ -160,8 +160,16 @@ void DealWithFile()
         strcat(copy_command," ");
         strcat(copy_command,path);
         strcat(copy_command,"\\output.pdf");
-        cout<<copy_command<<endl;
+       // cout<<copy_command<<endl;
         system(copy_command);
+        memset(copy_command,0,sizeof(copy_command));
+        strcat(copy_command,"copy /y ");
+        strcat(copy_command,temppath);
+        strcat(copy_command,"\\temp.tex");
+        strcat(copy_command," ");
+        strcat(copy_command,path);
+        strcat(copy_command,"\\output.tex");
+         system(copy_command);
         cout<<"--------------------------------------------------------------------"<<endl;
         tempfile.close();
         templatefile.close();
